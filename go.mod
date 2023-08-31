@@ -1,4 +1,4 @@
-module mobilestoragebucketutility
+module github.com/kaustubh-pandey-kp/storage-utility
 
 go 1.20
 
