@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"github.com/LambdatestIncPrivate/mobile-automation/mobile-storage-bucket-utility-initial_changes/pkg/entity"
-	"github.com/LambdatestIncPrivate/mobile-automation/mobile-storage-bucket-utility-initial_changes/pkg/repository"
+	"mobilestoragebucketutility/pkg/entity"
+	"mobilestoragebucketutility/pkg/repository"
 )
 
 
