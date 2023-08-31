@@ -14,17 +14,16 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/kaustubh-pandey-kp/storage-utility/constants"
 	"github.com/kaustubh-pandey-kp/storage-utility/pkg/entity"
-	"github.com/kaustubh-pandey-kp/storage-utility/pkg/lumber"
+	"github.com/kaustubh-pandey-kp/storage-utility/pkg/logger"
 )
 
 type WasabiRepository struct {
 	client       *s3.S3
-	logger       lumber.Logger
 	configParams constants.WasabiConfigParams
 	ctx          *context.Context
 }
 
-func NewWasabiRepository(logger lumber.Logger, configParams constants.WasabiConfigParams) (*WasabiRepository, error) {
+func NewWasabiRepository(configParams constants.WasabiConfigParams) (*WasabiRepository, error) {
 	cfg := &aws.Config{
 		Endpoint:    aws.String(configParams.WasabiEndpoint),
 		Credentials: credentials.NewStaticCredentials(configParams.WasabiAccessKey, configParams.WasabiSecretKey, ""),
@@ -37,7 +36,6 @@ func NewWasabiRepository(logger lumber.Logger, configParams constants.WasabiConf
 
 	return &WasabiRepository{
 		client:       s3.New(sess),
-		logger:       logger,
 		configParams: configParams,
 	}, nil
 }
@@ -50,15 +48,15 @@ func (w *WasabiRepository) UploadArtifact(artifact *entity.Artifact) (err error)
 	for attempt := 1; attempt < maxRetries; attempt++ {
 		err = w.FileUploadRetry(attempt, artifact)
 		if err != nil {
-			w.logger.Errorf("Failed uploading file to wasabi - mobile in attempt #%d, bucket %s, %+v", attempt, w.configParams.WasabiBucketName, err)
+			logger.Errorf("Failed uploading file to wasabi - mobile in attempt #%d, bucket %s, %+v", attempt, w.configParams.WasabiBucketName, err)
 		} else {
-			w.logger.Errorf("Success uploading file to wasabi in attempt #%d", attempt)
+			logger.Errorf("Success uploading file to wasabi in attempt #%d", attempt)
 			break
 		}
 	}
 
 	if err != nil {
-		w.logger.Infof("Failed uploading file to wasabi - mobile: Bucket %s, %+v", w.configParams.WasabiBucketName, err)
+		logger.Infof("Failed uploading file to wasabi - mobile: Bucket %s, %+v", w.configParams.WasabiBucketName, err)
 		return err
 	}
 	return nil
@@ -79,7 +77,7 @@ func (w *WasabiRepository) DownloadArtifact(artifactName string) (artifact *enti
 	_, err = buffer.ReadFrom(output.Body)
 
 	if err != nil {
-		w.logger.Infof("Error reading the object body %+v", err)
+		logger.Infof("Error reading the object body %+v", err)
 		return nil, err
 	}
 
@@ -88,7 +86,6 @@ func (w *WasabiRepository) DownloadArtifact(artifactName string) (artifact *enti
 	artifact = &entity.Artifact{
 		Key:         artifactName,
 		Content:     content,
-		ContentType: "",
 	}
 
 	return artifact, nil
