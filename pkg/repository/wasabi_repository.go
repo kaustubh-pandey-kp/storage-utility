@@ -5,9 +5,6 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"mobilestoragebucketutility/constants"
-	"mobilestoragebucketutility/pkg/entity"
-	"mobilestoragebucketutility/pkg/lumber"
 	"net/http"
 	"time"
 
@@ -15,6 +12,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/kaustubh-pandey-kp/storage-utility/constants"
+	"github.com/kaustubh-pandey-kp/storage-utility/pkg/entity"
+	"github.com/kaustubh-pandey-kp/storage-utility/pkg/lumber"
 )
 
 type WasabiRepository struct {

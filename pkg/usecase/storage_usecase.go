@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"mobilestoragebucketutility/pkg/entity"
-	"mobilestoragebucketutility/pkg/repository"
+	"github.com/kaustubh-pandey-kp/storage-utility/pkg/entity"
+	"github.com/kaustubh-pandey-kp/storage-utility/pkg/repository"
 )
 
 

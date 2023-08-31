@@ -2,8 +2,9 @@ package mobilestoragebucketutility
 
 import (
 	"errors"
-	"mobilestoragebucketutility/pkg/entity"
-	"mobilestoragebucketutility/pkg/repository"
+
+	"github.com/kaustubh-pandey-kp/storage-utility/pkg/entity"
+	"github.com/kaustubh-pandey-kp/storage-utility/pkg/repository"
 )
 
 type StorageBucketUtility struct {
