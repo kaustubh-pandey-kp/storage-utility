@@ -24,7 +24,7 @@ type WasabiRepository struct {
 	ctx          *context.Context
 }
 
-func NewWasabiRepository(logger lumber.Logger, endpoint string, configParams constants.WasabiConfigParams) (*WasabiRepository, error) {
+func NewWasabiRepository(logger lumber.Logger, configParams constants.WasabiConfigParams) (*WasabiRepository, error) {
 	cfg := &aws.Config{
 		Endpoint:    aws.String(configParams.WasabiEndpoint),
 		Credentials: credentials.NewStaticCredentials(configParams.WasabiAccessKey, configParams.WasabiSecretKey, ""),
