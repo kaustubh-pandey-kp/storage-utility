@@ -15,6 +15,7 @@ import (
 	"github.com/kaustubh-pandey-kp/storage-utility/constants"
 	"github.com/kaustubh-pandey-kp/storage-utility/pkg/entity"
 	"github.com/kaustubh-pandey-kp/storage-utility/pkg/logger"
+	cachedRedis "github.com/kaustubh-pandey-kp/storage-utility/pkg/redis"
 )
 
 type WasabiRepository struct {
@@ -48,6 +49,7 @@ func (w *WasabiRepository) UploadArtifact(artifact *entity.Artifact) (err error)
 	for attempt := 1; attempt < maxRetries; attempt++ {
 		err = w.FileUploadRetry(attempt, artifact)
 		if err != nil {
+			cachedRedis.IncrementWasabiFailureCounter()
 			logger.Errorf("Failed uploading file to wasabi - mobile in attempt #%d, bucket %s, %+v", attempt, w.configParams.WasabiBucketName, err)
 		} else {
 			logger.Errorf("Success uploading file to wasabi in attempt #%d", attempt)
@@ -84,8 +86,8 @@ func (w *WasabiRepository) DownloadArtifact(artifactName string) (artifact *enti
 	content := buffer.Bytes()
 
 	artifact = &entity.Artifact{
-		Key:         artifactName,
-		Content:     content,
+		Key:     artifactName,
+		Content: content,
 	}
 
 	return artifact, nil
